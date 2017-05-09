@@ -1,0 +1,45 @@
+submodule: ietf-ipv6-router-advertisements (belongs-to ietf-ipv6-unicast-routing)
+  augment /if:interfaces-state/if:interface/ip:ipv6:
+    x--ro ipv6-router-advertisements
+       x--ro send-advertisements?    boolean
+       x--ro max-rtr-adv-interval?   uint16
+       x--ro min-rtr-adv-interval?   uint16
+       x--ro managed-flag?           boolean
+       x--ro other-config-flag?      boolean
+       x--ro link-mtu?               uint32
+       x--ro reachable-time?         uint32
+       x--ro retrans-timer?          uint32
+       x--ro cur-hop-limit?          uint8
+       x--ro default-lifetime?       uint16
+       x--ro prefix-list
+          x--ro prefix* [prefix-spec]
+             x--ro prefix-spec           inet:ipv6-prefix
+             x--ro valid-lifetime?       uint32
+             x--ro on-link-flag?         boolean
+             x--ro preferred-lifetime?   uint32
+             x--ro autonomous-flag?      boolean
+  augment /if:interfaces/if:interface/ip:ipv6:
+    +--rw ipv6-router-advertisements
+       +--rw send-advertisements?        boolean
+       +--rw max-rtr-adv-interval?       uint16
+       +--rw min-rtr-adv-interval?       uint16
+       +--rw managed-flag?               boolean
+       +--rw other-config-flag?          boolean
+       +--rw link-mtu?                   uint32
+       +--rw reachable-time?             uint32
+       +--rw retrans-timer?              uint32
+       +--rw cur-hop-limit?              uint8
+       +--rw default-lifetime?           uint16
+       +--rw no-advertise-prefix-list
+       |  +--rw prefix* [prefix-spec]
+       |     +--rw prefix-spec     inet:ipv6-prefix
+       |     +--rw (control-adv-prefixes)?
+       |        +--:(no-advertise)
+       |           +--rw no-advertise?   empty
+       +--rw prefix-list
+          +--rw prefix* [prefix-spec]
+             +--rw prefix-spec           inet:ipv6-prefix
+             +--ro valid-lifetime?       uint32
+             +--ro on-link-flag?         boolean
+             +--ro preferred-lifetime?   uint32
+             +--ro autonomous-flag?      boolean

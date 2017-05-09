@@ -1,0 +1,206 @@
+module: ietf-mpls-ldp
+  augment /rt:routing/rt:control-plane-protocols:
+    +--rw mpls-ldp!
+       +--rw global
+       |  +--rw capability
+       |  +--rw graceful-restart
+       |  |  +--rw enable?                boolean
+       |  |  +--rw reconnect-time?        uint16
+       |  |  +--rw recovery-time?         uint16
+       |  |  +--rw forwarding-holdtime?   uint16
+       |  +--rw lsr-id?             yang:dotted-quad
+       |  +--rw address-families
+       |  |  +--rw ipv4!
+       |  |     +--rw enable?                           boolean
+       |  |     +--rw label-policy
+       |  |     |  +--rw advertise
+       |  |     |     +--rw egress-explicit-null
+       |  |     |        +--rw enable?   boolean
+       |  |     +--ro label-distribution-controlmode?   enumeration
+       |  |     +--ro bindings
+       |  |        +--ro address* [address]
+       |  |        |  +--ro address               inet:ipv4-address
+       |  |        |  +--ro advertisement-type?   advertised-received
+       |  |        |  +--ro peer?                 -> ../../../../../../peers/peer/lsr-id
+       |  |        +--ro fec-label* [fec]
+       |  |           +--ro fec     inet:ipv4-prefix
+       |  |           +--ro peer* [peer advertisement-type]
+       |  |              +--ro peer                  -> ../../../../../../../peers/peer/lsr-id
+       |  |              +--ro advertisement-type    advertised-received
+       |  |              +--ro label?                rt-types:mpls-label
+       |  |              +--ro used-in-forwarding?   boolean
+       |  +--rw discovery
+       |     +--rw interfaces
+       |     |  +--rw hello-holdtime?   uint16
+       |     |  +--rw hello-interval?   uint16
+       |     |  +--rw interface* [interface]
+       |     |     +--rw interface           mpls-interface-ref
+       |     |     +--ro next-hello?         uint16
+       |     |     +--rw address-families
+       |     |        +--rw ipv4!
+       |     |           +--rw enable?              boolean
+       |     |           +--ro hello-adjacencies* [adjacent-address]
+       |     |              +--ro adjacent-address    inet:ipv4-address
+       |     |              +--ro flag*               identityref
+       |     |              +--ro hello-holdtime
+       |     |              |  +--ro adjacent?     uint16
+       |     |              |  +--ro negotiated?   uint16
+       |     |              |  +--ro remaining?    uint16
+       |     |              +--ro next-hello?         uint16
+       |     |              +--ro statistics
+       |     |              |  +--ro discontinuity-time    yang:date-and-time
+       |     |              |  +--ro hello-received?       yang:counter64
+       |     |              |  +--ro hello-dropped?        yang:counter64
+       |     |              +--ro peer?               -> ../../../../../../../../peers/peer/lsr-id
+       |     +--rw targeted
+       |        +--rw hello-holdtime?     uint16
+       |        +--rw hello-interval?     uint16
+       |        +--rw hello-accept
+       |        |  +--rw enable?   boolean
+       |        +--rw address-families
+       |           +--rw ipv4!
+       |              +--ro hello-adjacencies* [local-address adjacent-address]
+       |              |  +--ro local-address       inet:ipv4-address
+       |              |  +--ro adjacent-address    inet:ipv4-address
+       |              |  +--ro flag*               identityref
+       |              |  +--ro hello-holdtime
+       |              |  |  +--ro adjacent?     uint16
+       |              |  |  +--ro negotiated?   uint16
+       |              |  |  +--ro remaining?    uint16
+       |              |  +--ro next-hello?         uint16
+       |              |  +--ro statistics
+       |              |  |  +--ro discontinuity-time    yang:date-and-time
+       |              |  |  +--ro hello-received?       yang:counter64
+       |              |  |  +--ro hello-dropped?        yang:counter64
+       |              |  +--ro peer?               -> ../../../../../../../peers/peer/lsr-id
+       |              +--rw target* [adjacent-address]
+       |                 +--rw adjacent-address    inet:ipv4-address
+       |                 +--rw enable?             boolean
+       |                 +--rw local-address?      inet:ipv4-address
+       +--rw peers
+          +--rw authentication
+          |  +--rw (auth-type-selection)?
+          |     +--:(auth-key)
+          |        +--rw md5-key?   string
+          +--rw session-ka-holdtime?   uint16
+          +--rw session-ka-interval?   uint16
+          +--rw peer* [lsr-id]
+             +--rw lsr-id                      yang:dotted-quad
+             +--rw authentication
+             |  +--rw (auth-type-selection)?
+             |     +--:(auth-key)
+             |        +--rw md5-key?   string
+             +--rw capability
+             +--ro address-families
+             |  +--ro ipv4!
+             |     +--ro hello-adjacencies* [local-address adjacent-address]
+             |        +--ro local-address       inet:ipv4-address
+             |        +--ro adjacent-address    inet:ipv4-address
+             |        +--ro flag*               identityref
+             |        +--ro hello-holdtime
+             |        |  +--ro adjacent?     uint16
+             |        |  +--ro negotiated?   uint16
+             |        |  +--ro remaining?    uint16
+             |        +--ro next-hello?         uint16
+             |        +--ro statistics
+             |        |  +--ro discontinuity-time    yang:date-and-time
+             |        |  +--ro hello-received?       yang:counter64
+             |        |  +--ro hello-dropped?        yang:counter64
+             |        +--ro interface?          mpls-interface-ref
+             +--ro label-advertisement-mode
+             |  +--ro local?        label-adv-mode
+             |  +--ro peer?         label-adv-mode
+             |  +--ro negotiated?   label-adv-mode
+             +--ro next-keep-alive?            uint16
+             +--ro peer-ldp-id?                yang:dotted-quad
+             +--ro received-peer
+             |  +--ro graceful-restart
+             |  |  +--ro enable?           boolean
+             |  |  +--ro reconnect-time?   uint16
+             |  |  +--ro recovery-time?    uint16
+             |  +--ro capability
+             |     +--ro end-of-lib
+             |     |  +--ro enable?   boolean
+             |     +--ro typed-wildcard-fec
+             |     |  +--ro enable?   boolean
+             |     +--ro upstream-label-assignment
+             |        +--ro enable?   boolean
+             +--ro session-holdtime
+             |  +--ro peer?         uint16
+             |  +--ro negotiated?   uint16
+             |  +--ro remaining?    uint16
+             +--ro session-state?              enumeration
+             +--ro tcp-connection
+             |  +--ro local-address?    inet:ip-address
+             |  +--ro local-port?       inet:port-number
+             |  +--ro remote-address?   inet:ip-address
+             |  +--ro remote-port?      inet:port-number
+             +--ro up-time?                    string
+             +--ro statistics
+                +--ro discontinuity-time          yang:date-and-time
+                +--ro received
+                |  +--ro total-octets?          yang:counter64
+                |  +--ro total-messages?        yang:counter64
+                |  +--ro address?               yang:counter64
+                |  +--ro address-withdraw?      yang:counter64
+                |  +--ro initialization?        yang:counter64
+                |  +--ro keepalive?             yang:counter64
+                |  +--ro label-abort-request?   yang:counter64
+                |  +--ro label-mapping?         yang:counter64
+                |  +--ro label-release?         yang:counter64
+                |  +--ro label-request?         yang:counter64
+                |  +--ro label-withdraw?        yang:counter64
+                |  +--ro notification?          yang:counter64
+                +--ro sent
+                |  +--ro total-octets?          yang:counter64
+                |  +--ro total-messages?        yang:counter64
+                |  +--ro address?               yang:counter64
+                |  +--ro address-withdraw?      yang:counter64
+                |  +--ro initialization?        yang:counter64
+                |  +--ro keepalive?             yang:counter64
+                |  +--ro label-abort-request?   yang:counter64
+                |  +--ro label-mapping?         yang:counter64
+                |  +--ro label-release?         yang:counter64
+                |  +--ro label-request?         yang:counter64
+                |  +--ro label-withdraw?        yang:counter64
+                |  +--ro notification?          yang:counter64
+                +--ro total-addresses?            uint32
+                +--ro total-labels?               uint32
+                +--ro total-fec-label-bindings?   uint32
+
+  rpcs:
+    +---x mpls-ldp-clear-peer
+    |  +---w input
+    |     +---w lsr-id?   union
+    +---x mpls-ldp-clear-hello-adjacency
+    |  +---w input
+    |     +---w hello-adjacency
+    |        +---w (hello-adjacency-type)?
+    |           +--:(targeted)
+    |           |  +---w targeted!
+    |           |     +---w target-address?   inet:ip-address
+    |           +--:(link)
+    |              +---w link!
+    |                 +---w next-hop-interface?   mpls-interface-ref
+    |                 +---w next-hop-address?     inet:ip-address
+    +---x mpls-ldp-clear-peer-statistics
+       +---w input
+          +---w lsr-id?   union
+
+  notifications:
+    +---n mpls-ldp-peer-event
+    |  +--ro event-type?   oper-status-event-type
+    |  +--ro peer-ref?     -> /rt:routing/control-plane-protocols/mpls-ldp/peers/peer/lsr-id
+    +---n mpls-ldp-hello-adjacency-event
+    |  +--ro event-type?   oper-status-event-type
+    |  +--ro (hello-adjacency-type)?
+    |     +--:(targeted)
+    |     |  +--ro targeted
+    |     |     +--ro target-address?   inet:ip-address
+    |     +--:(link)
+    |        +--ro link
+    |           +--ro next-hop-interface?   mpls-interface-ref
+    |           +--ro next-hop-address?     inet:ip-address
+    +---n mpls-ldp-fec-event
+       +--ro event-type?   oper-status-event-type
+       +--ro prefix?       inet:ip-prefix

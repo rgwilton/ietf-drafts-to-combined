@@ -1,0 +1,262 @@
+module: ietf-te
+    +--rw te!
+       +--rw globals
+       |  +--rw named-admin-groups
+       |  |  +--rw named-admin-group* [name] {te-types:extended-admin-groups,te-types:named-extended-admin-groups}?
+       |  |     +--rw name            string
+       |  |     +--rw bit-position?   uint32
+       |  +--rw named-srlgs
+       |  |  +--rw named-srlg* [name] {te-types:named-srlg-groups}?
+       |  |     +--rw name     string
+       |  |     +--rw group?   te-types:srlg
+       |  |     +--rw cost?    uint32
+       |  +--rw named-explicit-paths
+       |  |  +--rw named-explicit-path* [name]
+       |  |     +--rw name                      string
+       |  |     +--rw explicit-route-objects
+       |  |        +--rw explicit-route-object* [index]
+       |  |           +--rw explicit-route-usage?   identityref
+       |  |           +--rw index                   uint32
+       |  |           +--rw (type)?
+       |  |              +--:(ip-address)
+       |  |              |  +--rw ip-address-hop
+       |  |              |     +--rw address?    inet:ip-address
+       |  |              |     +--rw hop-type?   te-hop-type
+       |  |              +--:(as-number)
+       |  |              |  +--rw as-number-hop
+       |  |              |     +--rw as-number?   binary
+       |  |              |     +--rw hop-type?    te-hop-type
+       |  |              +--:(unnumbered-link)
+       |  |              |  +--rw unnumbered-hop
+       |  |              |     +--rw router-id?      inet:ip-address
+       |  |              |     +--rw interface-id?   uint32
+       |  |              |     +--rw hop-type?       te-hop-type
+       |  |              +--:(label)
+       |  |              |  +--rw label-hop
+       |  |              |     +--rw value?   rt-types:generalized-label
+       |  |              +--:(sid)
+       |  |                 +--rw sid-hop
+       |  |                    +--rw sid?   rt-types:generalized-label
+       |  +--rw named-path-constraints
+       |     +--rw named-path-constraint* [name] {te-types:named-path-constraints}?
+       |        +--rw name                      string
+       |        +--rw topology-id?              te-types:te-topology-id
+       |        +--rw cost-limit?               uint32
+       |        +--rw hop-limit?                uint8
+       |        +--rw metric-type?              identityref
+       |        +--rw tiebreaker-type?          identityref
+       |        +--rw ignore-overload?          boolean
+       |        +--rw setup-priority?           uint8
+       |        +--rw hold-priority?            uint8
+       |        +--rw path-affinities
+       |        |  +--rw (style)?
+       |        |     +--:(values)
+       |        |     |  +--rw value?         uint32
+       |        |     |  +--rw mask?          uint32
+       |        |     +--:(named)
+       |        |        +--rw constraints* [usage]
+       |        |           +--rw usage         identityref
+       |        |           +--rw constraint
+       |        |              +--rw affinity-names* [name]
+       |        |                 +--rw name    string
+       |        +--rw path-srlgs
+       |        |  +--rw (style)?
+       |        |     +--:(values)
+       |        |     |  +--rw usage?         identityref
+       |        |     |  +--rw values*        te-types:srlg
+       |        |     +--:(named)
+       |        |        +--rw constraints* [usage]
+       |        |           +--rw usage         identityref
+       |        |           +--rw constraint
+       |        |              +--rw srlg-names* [name]
+       |        |                 +--rw name    string
+       |        +--rw explicit-route-objects
+       |        |  +--rw explicit-route-object* [index]
+       |        |     +--rw explicit-route-usage?   identityref
+       |        |     +--rw index                   uint32
+       |        |     +--rw (type)?
+       |        |        +--:(ip-address)
+       |        |        |  +--rw ip-address-hop
+       |        |        |     +--rw address?    inet:ip-address
+       |        |        |     +--rw hop-type?   te-hop-type
+       |        |        +--:(as-number)
+       |        |        |  +--rw as-number-hop
+       |        |        |     +--rw as-number?   binary
+       |        |        |     +--rw hop-type?    te-hop-type
+       |        |        +--:(unnumbered-link)
+       |        |        |  +--rw unnumbered-hop
+       |        |        |     +--rw router-id?      inet:ip-address
+       |        |        |     +--rw interface-id?   uint32
+       |        |        |     +--rw hop-type?       te-hop-type
+       |        |        +--:(label)
+       |        |        |  +--rw label-hop
+       |        |        |     +--rw value?   rt-types:generalized-label
+       |        |        +--:(sid)
+       |        |           +--rw sid-hop
+       |        |              +--rw sid?   rt-types:generalized-label
+       |        +--rw bandwidth
+       |           +--rw specification-type?   te-mpls-types:te-bandwidth-type
+       |           +--rw set-bandwidth?        te-mpls-types:bandwidth-kbps
+       |           +--rw class-type?           te-types:te-ds-class
+       |           +--ro signaled-bandwidth?   te-mpls-types:bandwidth-kbps
+       +--rw tunnels
+       |  +--rw tunnel* [name]
+       |  |  +--rw name                    string
+       |  |  +--rw type?                   identityref
+       |  |  +--rw identifier?             uint16
+       |  |  +--rw description?            string
+       |  |  +--rw encoding?               identityref
+       |  |  +--rw protection-type?        identityref
+       |  |  +--rw admin-status?           identityref
+       |  |  +--rw preference?             uint8
+       |  |  +--rw reoptimize-timer?       uint16
+       |  |  +--rw source?                 inet:ip-address
+       |  |  +--rw destination?            inet:ip-address
+       |  |  +--rw src-tp-id?              binary
+       |  |  +--rw dst-tp-id?              binary
+       |  |  +--rw setup-priority?         uint8
+       |  |  +--rw hold-priority?          uint8
+       |  |  +--rw signaling-type?         identityref
+       |  |  +--rw hierarchical-link-id
+       |  |  |  +--rw local-te-node-id?      te-types:te-node-id
+       |  |  |  +--rw local-te-link-tp-id?   te-types:te-tp-id
+       |  |  |  +--rw remote-te-node-id?     te-types:te-node-id
+       |  |  |  +--rw te-topology-id?        te-types:te-topology-id
+       |  |  +--rw bidirectional
+       |  |  |  +--rw association
+       |  |  |     +--rw id?              uint16
+       |  |  |     +--rw source?          inet:ip-address
+       |  |  |     +--rw global-source?   inet:ip-address
+       |  |  |     +--rw type?            identityref
+       |  |  |     +--rw provisioing?     identityref
+       |  |  +--ro oper-status?            identityref
+       |  |  +--rw bandwidth
+       |  |  |  +--rw specification-type?   te-mpls-types:te-bandwidth-type
+       |  |  |  +--rw set-bandwidth?        te-mpls-types:bandwidth-kbps
+       |  |  |  +--rw class-type?           te-types:te-ds-class
+       |  |  |  +--ro signaled-bandwidth?   te-mpls-types:bandwidth-kbps
+       |  |  |  +--rw auto-bandwidth
+       |  |  |     +--rw enabled?            boolean
+       |  |  |     +--rw min-bw?             te-mpls-types:bandwidth-kbps
+       |  |  |     +--rw max-bw?             te-mpls-types:bandwidth-kbps
+       |  |  |     +--rw adjust-interval?    uint32
+       |  |  |     +--rw adjust-threshold?   te-types:percentage
+       |  |  |     +--rw overflow
+       |  |  |     |  +--rw enabled?               boolean
+       |  |  |     |  +--rw overflow-threshold?    te-types:percentage
+       |  |  |     |  +--rw trigger-event-count?   uint16
+       |  |  |     +--rw underflow
+       |  |  |        +--rw enabled?               boolean
+       |  |  |        +--rw underflow-threshold?   te-types:percentage
+       |  |  |        +--rw trigger-event-count?   uint16
+       |  |  +--rw p2p-primary-paths
+       |  |  |  +--rw p2p-primary-path* [name]
+       |  |  |     +--rw name                             string
+       |  |  |     +--rw preference?                      uint8
+       |  |  |     +--rw path-setup-protocol?             identityref
+       |  |  |     +--rw path-computation-method?         identityref
+       |  |  |     +--rw path-computation-server?         inet:ip-address
+       |  |  |     +--rw compute-only?                    empty
+       |  |  |     +--rw use-cspf?                        boolean
+       |  |  |     +--rw verbatim?                        empty
+       |  |  |     +--rw lockdown?                        empty
+       |  |  |     +--rw named-explicit-path?             -> ../../../../../globals/named-explicit-paths/named-explicit-path/name
+       |  |  |     +--rw named-path-constraint?           -> ../../../../../globals/named-path-constraints/named-path-constraint/name {te-types:named-path-constraints}?
+       |  |  |     +--rw lsps
+       |  |  |     |  +--ro lsp* [source destination tunnel-id lsp-id extended-tunnel-id type]
+       |  |  |     |     +--ro source                -> ../../../../../../../lsps/lsp/source
+       |  |  |     |     +--ro destination           -> ../../../../../../../lsps/lsp/destination
+       |  |  |     |     +--ro tunnel-id             -> ../../../../../../../lsps/lsp/tunnel-id
+       |  |  |     |     +--ro lsp-id                -> ../../../../../../../lsps/lsp/lsp-id
+       |  |  |     |     +--ro extended-tunnel-id    -> ../../../../../../../lsps/lsp/extended-tunnel-id
+       |  |  |     |     +--ro type                  -> ../../../../../../../lsps/lsp/type
+       |  |  |     |     +--ro signaling-type?       identityref
+       |  |  |     +--rw candidate-p2p-secondary-paths
+       |  |  |        +--rw candidate-p2p-secondary-path* [secondary-path]
+       |  |  |           +--rw secondary-path         -> ../../../../../p2p-secondary-paths/p2p-secondary-path/name
+       |  |  |           +--rw priority?              uint16
+       |  |  |           +--rw path-setup-protocol?   identityref
+       |  |  |           +--ro active?                boolean
+       |  |  +--rw p2p-secondary-paths
+       |  |  |  +--rw p2p-secondary-path* [name]
+       |  |  |     +--rw name                       string
+       |  |  |     +--rw preference?                uint8
+       |  |  |     +--rw path-setup-protocol?       identityref
+       |  |  |     +--rw path-computation-method?   identityref
+       |  |  |     +--rw path-computation-server?   inet:ip-address
+       |  |  |     +--rw compute-only?              empty
+       |  |  |     +--rw use-cspf?                  boolean
+       |  |  |     +--rw verbatim?                  empty
+       |  |  |     +--rw lockdown?                  empty
+       |  |  |     +--rw named-explicit-path?       -> ../../../../../globals/named-explicit-paths/named-explicit-path/name
+       |  |  |     +--rw named-path-constraint?     -> ../../../../../globals/named-path-constraints/named-path-constraint/name {te-types:named-path-constraints}?
+       |  |  |     +--rw lsps
+       |  |  |        +--ro lsp* [source destination tunnel-id lsp-id extended-tunnel-id type]
+       |  |  |           +--ro source                -> ../../../../../../../lsps/lsp/source
+       |  |  |           +--ro destination           -> ../../../../../../../lsps/lsp/destination
+       |  |  |           +--ro tunnel-id             -> ../../../../../../../lsps/lsp/tunnel-id
+       |  |  |           +--ro lsp-id                -> ../../../../../../../lsps/lsp/lsp-id
+       |  |  |           +--ro extended-tunnel-id    -> ../../../../../../../lsps/lsp/extended-tunnel-id
+       |  |  |           +--ro type                  -> ../../../../../../../lsps/lsp/type
+       |  |  |           +--ro signaling-type?       identityref
+       |  |  +---x tunnel-action
+       |  |     +---w input
+       |  |     |  +---w action-type?   identityref
+       |  |     +--ro output
+       |  |        +--ro action-result?   identityref
+       |  +--rw tunnel-p2mp* [name]
+       |     +--rw name                   string
+       |     +--rw type?                  identityref
+       |     +--rw identifier?            uint16
+       |     +--rw description?           string
+       |     +--rw setup-priority?        uint8
+       |     +--rw hold-priority?         uint8
+       |     +--rw lsp-protection-type?   identityref
+       |     +--rw admin-status?          identityref
+       |     +--rw reoptimize-timer?      uint16
+       +--ro lsps
+          +--ro lsp* [source destination tunnel-id lsp-id extended-tunnel-id type]
+             +--ro source                         inet:ip-address
+             +--ro destination                    inet:ip-address
+             +--ro tunnel-id                      uint16
+             +--ro lsp-id                         uint16
+             +--ro extended-tunnel-id             inet:ip-address
+             +--ro type                           identityref
+             +--ro oper-status?                   identityref
+             +--ro path-setup-protocol?           identityref
+             +--ro origin-type?                   enumeration
+             +--ro lsp-resource-status?           enumeration
+             +--ro lsp-protection-role?           enumeration
+             +--ro lsp-carry-normal-traffic?      empty
+             +--ro lsp-record-route-subobjects
+                +--ro record-route-subobject* [index]
+                   +--ro index           uint32
+                   +--ro (type)?
+                      +--:(ip-address)
+                      |  +--ro ip-address?     inet:ip-address
+                      |  +--ro ip-flags?       binary
+                      +--:(unnumbered-link)
+                      |  +--ro router-id?      inet:ip-address
+                      |  +--ro interface-id?   uint32
+                      +--:(label)
+                         +--ro value?          rt-types:generalized-label
+                         +--ro label-flags?    binary
+
+  rpcs:
+    +---x globals-rpc
+    +---x interfaces-rpc
+    +---x tunnels-rpc
+       +---w input
+       |  +---w tunnel-info
+       |     +---w (type)?
+       |        +--:(tunnel-p2p)
+       |        |  +---w p2p-id?    te:tunnel-ref
+       |        +--:(tunnel-p2mp)
+       |           +---w p2mp-id?   te:tunnel-p2mp-ref
+       +--ro output
+          +--ro result
+             +--ro result?   enumeration
+
+  notifications:
+    +---n globals-notif
+    +---n tunnels-notif

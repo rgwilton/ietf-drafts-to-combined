@@ -1,0 +1,119 @@
+module: ietf-rsvp-te
+  augment /rt:routing/rt:control-plane-protocols/rt:control-plane-protocol/rsvp:rsvp/rsvp:globals:
+    +--rw global-soft-preemption!
+       +--rw soft-preemption-timeout?   uint16
+  augment /rt:routing/rt:control-plane-protocols/rt:control-plane-protocol/rsvp:rsvp/rsvp:interfaces:
+    +--rw rsvp-te-interface-attributes
+  augment /rt:routing/rt:control-plane-protocols/rt:control-plane-protocol/rsvp:rsvp/rsvp:interfaces/rsvp:interface:
+    +--rw rsvp-te-interface-attributes
+  augment /rt:routing/rt:control-plane-protocols/rt:control-plane-protocol/rsvp:rsvp/rsvp:globals/rsvp:sessions/rsvp:session/rsvp:psbs/rsvp:psb:
+    +--ro tspec-average-rate?   rt-types:bandwidth-ieee-float32
+    +--ro tspec-size?           rt-types:bandwidth-ieee-float32
+    +--ro tspec-peak-rate?      rt-types:bandwidth-ieee-float32
+    +--ro min-policed-unit?     uint32
+    +--ro max-packet-size?      uint32
+  augment /rt:routing/rt:control-plane-protocols/rt:control-plane-protocol/rsvp:rsvp/rsvp:globals/rsvp:sessions/rsvp:session/rsvp:rsbs/rsvp:rsb:
+    +--ro fspec-average-rate?   rt-types:bandwidth-ieee-float32
+    +--ro fspec-size?           rt-types:bandwidth-ieee-float32
+    +--ro fspec-peak-rate?      rt-types:bandwidth-ieee-float32
+    +--ro min-policed-unit?     uint32
+    +--ro max-packet-size?      uint32
+  augment /rt:routing/rt:control-plane-protocols/rt:control-plane-protocol/rsvp:rsvp/rsvp:neighbors:
+  augment /te:te/te:tunnels/te:tunnel:
+    +--rw lsp-signaled-name?           string
+    +--rw local-recording-desired?     boolean
+    +--rw se-style-desired?            boolean
+    +--rw path-reevaluation-request?   boolean
+    +--rw soft-preemption-desired?     boolean
+    +--rw lsp-rerouting?               enumeration
+    +--rw lsp-integrity-required?      boolean
+    +--rw lsp-contiguous?              boolean
+    +--rw lsp-stitching-desired?       boolean
+    +--rw lsp-preplanned?              boolean
+    +--rw lsp-oob-mapping?             boolean
+    +--rw retry-timer?                 uint16
+  augment /te:te/te:lsps/te:lsp:
+    +--ro associated-rsvp-session?            -> /rt:routing/control-plane-protocols/control-plane-protocol/rsvp:rsvp/globals/sessions/session/local-index
+    +--ro lsp-signaled-name?                  string
+    +--ro local-recording-desired?            boolean
+    +--ro se-style-desired?                   boolean
+    +--ro path-reevaluation-request?          boolean
+    +--ro soft-preemption-desired?            boolean
+    +--ro lsp-rerouting?                      enumeration
+    +--ro lsp-integrity-required?             boolean
+    +--ro lsp-contiguous?                     boolean
+    +--ro lsp-stitching-desired?              boolean
+    +--ro lsp-preplanned?                     boolean
+    +--ro lsp-oob-mapping?                    boolean
+    +--ro explicit-route-objects
+    |  +--ro incoming-explicit-route-hop* [index]
+    |  |  +--ro index             uint32
+    |  |  +--ro (type)?
+    |  |     +--:(ip-address)
+    |  |     |  +--ro ip-address-hop
+    |  |     |     +--ro address?    inet:ip-address
+    |  |     |     +--ro hop-type?   te-hop-type
+    |  |     +--:(as-number)
+    |  |     |  +--ro as-number-hop
+    |  |     |     +--ro as-number?   binary
+    |  |     |     +--ro hop-type?    te-hop-type
+    |  |     +--:(unnumbered-link)
+    |  |     |  +--ro unnumbered-hop
+    |  |     |     +--ro router-id?      inet:ip-address
+    |  |     |     +--ro interface-id?   uint32
+    |  |     |     +--ro hop-type?       te-hop-type
+    |  |     +--:(label)
+    |  |     |  +--ro label-hop
+    |  |     |     +--ro value?   rt-types:generalized-label
+    |  |     +--:(sid)
+    |  |        +--ro sid-hop
+    |  |           +--ro sid?   rt-types:generalized-label
+    |  +--ro outgoing-explicit-route-hop* [index]
+    |     +--ro index             uint32
+    |     +--ro (type)?
+    |        +--:(ip-address)
+    |        |  +--ro ip-address-hop
+    |        |     +--ro address?    inet:ip-address
+    |        |     +--ro hop-type?   te-hop-type
+    |        +--:(as-number)
+    |        |  +--ro as-number-hop
+    |        |     +--ro as-number?   binary
+    |        |     +--ro hop-type?    te-hop-type
+    |        +--:(unnumbered-link)
+    |        |  +--ro unnumbered-hop
+    |        |     +--ro router-id?      inet:ip-address
+    |        |     +--ro interface-id?   uint32
+    |        |     +--ro hop-type?       te-hop-type
+    |        +--:(label)
+    |        |  +--ro label-hop
+    |        |     +--ro value?   rt-types:generalized-label
+    |        +--:(sid)
+    |           +--ro sid-hop
+    |              +--ro sid?   rt-types:generalized-label
+    +--ro incoming-record-route-subobjects
+    |  +--ro incoming-record-route-subobject* [index]
+    |     +--ro index           uint32
+    |     +--ro (type)?
+    |        +--:(ip-address)
+    |        |  +--ro ip-address?     inet:ip-address
+    |        |  +--ro ip-flags?       binary
+    |        +--:(unnumbered-link)
+    |        |  +--ro router-id?      inet:ip-address
+    |        |  +--ro interface-id?   uint32
+    |        +--:(label)
+    |           +--ro value?          rt-types:generalized-label
+    |           +--ro label-flags?    binary
+    +--ro outgoing-record-route-subobjects
+       +--ro outgoing-record-route-subobject* [index]
+          +--ro index           uint32
+          +--ro (type)?
+             +--:(ip-address)
+             |  +--ro ip-address?     inet:ip-address
+             |  +--ro ip-flags?       binary
+             +--:(unnumbered-link)
+             |  +--ro router-id?      inet:ip-address
+             |  +--ro interface-id?   uint32
+             +--:(label)
+                +--ro value?          rt-types:generalized-label
+                +--ro label-flags?    binary
+  augment /te:te/te-dev:interfaces/te-dev:interface:

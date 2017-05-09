@@ -1,0 +1,47 @@
+module: ietf-ipv4-unicast-routing
+  augment /rt:routing/rt:ribs/rt:rib/rt:routes/rt:route:
+    +--ro destination-prefix?   inet:ipv4-prefix
+  augment /rt:routing/rt:ribs/rt:rib/rt:routes/rt:route/rt:next-hop/rt:next-hop-options/rt:simple-next-hop:
+    +--ro next-hop-address?   inet:ipv4-address
+  augment /rt:routing/rt:ribs/rt:rib/rt:routes/rt:route/rt:next-hop/rt:next-hop-options/rt:next-hop-list/rt:next-hop-list/rt:next-hop:
+    +--ro address?   inet:ipv4-address
+  augment /rt:routing/rt:ribs/rt:rib/rt:active-route/rt:input:
+    +---- destination-address?   inet:ipv4-address
+  augment /rt:routing/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route:
+    +---- destination-prefix?   inet:ipv4-prefix
+  augment /rt:routing/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route/rt:next-hop/rt:next-hop-options/rt:simple-next-hop:
+    +---- next-hop-address?   inet:ipv4-address
+  augment /rt:routing/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route/rt:next-hop/rt:next-hop-options/rt:next-hop-list/rt:next-hop-list/rt:next-hop:
+    +---- next-hop-address?   inet:ipv4-address
+  augment /rt:routing/rt:control-plane-protocols/rt:control-plane-protocol/rt:static-routes:
+    +--rw ipv4
+       +--rw route* [destination-prefix]
+          +--rw destination-prefix    inet:ipv4-prefix
+          +--rw description?          string
+          +--rw next-hop
+             +--rw (next-hop-options)
+                +--:(simple-next-hop)
+                |  +--rw outgoing-interface?   if:interface-ref
+                |  +--rw next-hop-address?     inet:ipv4-address
+                +--:(special-next-hop)
+                |  +--rw special-next-hop?     enumeration
+                +--:(next-hop-list)
+                   +--rw next-hop-list
+                      +--rw next-hop* [index]
+                         +--rw index                 string
+                         +--rw outgoing-interface?   if:interface-ref
+                         +--rw next-hop-address?     inet:ipv4-address
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:routes/rt:route:
+    x--ro destination-prefix?   inet:ipv4-prefix
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:routes/rt:route/rt:next-hop/rt:next-hop-options/rt:simple-next-hop:
+    x--ro next-hop-address?   inet:ipv4-address
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:routes/rt:route/rt:next-hop/rt:next-hop-options/rt:next-hop-list/rt:next-hop-list/rt:next-hop:
+    x--ro address?   inet:ipv4-address
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:active-route/rt:input:
+    x---- destination-address?   inet:ipv4-address
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route:
+    x---- destination-prefix?   inet:ipv4-prefix
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route/rt:next-hop/rt:next-hop-options/rt:simple-next-hop:
+    x---- next-hop-address?   inet:ipv4-address
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route/rt:next-hop/rt:next-hop-options/rt:next-hop-list/rt:next-hop-list/rt:next-hop:
+    x---- next-hop-address?   inet:ipv4-address

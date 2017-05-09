@@ -1,0 +1,29 @@
+module: ietf-te-kpi-telemetry
+  augment /te:te/te:tunnels/te:tunnel:
+    +--rw te-scaling-intent
+       +--rw scale-in
+       |  +--rw scale-in-operation-type?   scaling-criteria-operation
+       |  +--rw threshold-time?            uint32
+       |  +--rw scale-in-condition* [performance-type]
+       |     +--rw performance-type    identityref
+       |     +--rw performance-data?   binary
+       +--rw scale-down
+          +--rw cooldown-time?              uint32
+          +--rw scale-out-operation-type?   scaling-criteria-operation
+          +--rw scale-out-condition* [performance-type]
+             +--rw performance-type    identityref
+             +--rw performance-data?   binary
+  augment /te:te/te:tunnels/te:tunnel:
+    +--rw te-telemetry
+       +--rw data
+          +--rw one-way-delay?             uint32
+          +--rw two-way-delay?             uint32
+          +--rw one-way-delay-min?         uint32
+          +--rw one-way-delay-max?         uint32
+          +--rw two-way-delay-min?         uint32
+          +--rw two-way-delay-max?         uint32
+          +--rw one-way-delay-variation?   uint32
+          +--rw two-way-delay-variation?   uint32
+          +--rw one-way-packet-loss?       decimal64
+          +--rw two-way-packet-loss?       decimal64
+          +--rw utilized-bandwidth?        rt:bandwidth-ieee-float32

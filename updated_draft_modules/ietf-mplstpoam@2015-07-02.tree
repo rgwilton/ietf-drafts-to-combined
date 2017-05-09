@@ -1,0 +1,223 @@
+module: ietf-mplstpoam
+    +--rw mplstp-oam
+       +--rw ais-enable?   enable
+       +--rw meg* [meg-name]
+          +--rw meg-name            string
+          +--rw me-type?            me-type
+          +--rw meg-id?             string
+          +--rw meg-level?          uint8
+          +--rw oam-active-state?   active-type
+          +--rw pw* [local-peer-ip local-vc-id local-vc-type remote-peer-ip remote-vc-id remote-vc-type]
+          |  +--rw local-peer-ip     inet:ip-address
+          |  +--rw local-vc-id       uint32
+          |  +--rw local-vc-type     vc-type
+          |  +--rw remote-peer-ip    inet:ip-address
+          |  +--rw remote-vc-id      uint32
+          |  +--rw remote-vc-type    vc-type
+          |  +--rw mep-id?           uint16
+          |  +--rw remote-mep-id?    uint16
+          |  +--rw vll-ttl?          uint8
+          |  +--rw gal-enable?       enable
+          |  +--rw gal-mode?         gal-mode
+          +--rw lsp* [tunnel-name tunnel-id ingress-lsr-id]
+          |  +--rw tunnel-name               string
+          |  +--rw tunnel-id                 uint32
+          |  +--rw ingress-lsr-id            inet:ip-address
+          |  +--rw mep-id?                   uint16
+          |  +--rw remote-mep-id?            uint16
+          |  +--rw reverse-tunnel-name       string
+          |  +--rw reverse-tunnel-id?        uint16
+          |  +--rw reverse-ingress-lsr-id?   inet:ip-address
+          |  +--rw tunnel-description?       string
+          |  +--rw tunnel-type?              tunnel-type
+          |  +--rw tunnel-direction?         tunnel-direction-type
+          +--rw section* [section-id]
+          |  +--rw section-id       uint64
+          |  +--rw if-name?         string
+          |  +--rw peer-ip          inet:ip-address
+          |  +--rw peer-lsr-id?     inet:ip-address
+          |  +--rw mep-id?          uint16
+          |  +--rw remote-mep-id?   uint16
+          +--rw pw-spme* [local-peer-ip local-vc-id switch-peer-ip switch-vc-id vc-type instance-name]
+          |  +--rw local-peer-ip     inet:ip-address
+          |  +--rw local-vc-id       uint32
+          |  +--rw switch-peer-ip    inet:ip-address
+          |  +--rw switch-vc-id      uint32
+          |  +--rw vc-type           vc-type
+          |  +--rw instance-name     string
+          +--rw lsp-spme* [tunnel-id local-lsr-id remote-lsr-id]
+          |  +--rw tunnel-id        uint32
+          |  +--rw local-lsr-id     inet:ip-address
+          |  +--rw remote-lsr-id    inet:ip-address
+          +--rw cc
+          |  +--rw cc-session-mode?            cc-session-mode
+          |  +--rw cc-authentication-enable?   enable
+          |  +--rw cc-exp?                     uint8
+          |  +--rw cc-transmit-interval?       cc-interval
+          |  +--rw cc-recieve-interval?        cc-interval
+          |  +--rw cc-detect-multiplier?       cc-detect-multiplier
+          |  +--rw cc-enable?                  enable
+          +--rw cv
+          |  +--rw cv-session-mode?            cc-session-mode
+          |  +--rw cv-authentication-enable?   enable
+          |  +--rw cv-exp?                     uint8
+          |  +--rw cv-interval?                cv-interval
+          |  +--rw cv-detect-multiplier?       cv-detect-multiplier
+          |  +--rw cv-enable?                  enable
+          +--rw ais
+          |  +--rw ais-exp?        uint8
+          |  +--rw ais-interval?   ais-interval
+          +--rw lkr
+          |  +--rw lkr-exp?        uint8
+          |  +--rw lkr-interval?   lkr-interval
+          |  +--rw lkr-enable?     enable
+          +--rw one-way-dm-send
+          |  +--rw one-dm-send-enable?   enable
+          |  +--rw one-dm-interval?      dm-interval
+          |  +--rw one-dm-exp?           uint8
+          |  +--rw one-dm-packet-size?   uint16
+          |  +--rw one-dm-pad-value?     dm-padding-value
+          +--rw one-way-dm-rcv
+          |  +--rw onr-dm-rcv-enable?        enable
+          |  +--rw one-dm-rcv-enable-type?   one-way-rcv-type
+          +--rw two-way-dm-send
+          |  +--rw two-dm-send-enable?   enable
+          |  +--rw two-dm-interval?      dm-interval
+          |  +--rw two-dm-exp?           uint8
+          |  +--rw two-dm-packet-size?   uint16
+          |  +--rw two-dm-pad-value?     dm-padding-value
+          |  +--rw two-dm-time-stamp?    enable
+          +--rw two-way-dm-rcv
+          |  +--rw two-dm-rcv-enable?   enable
+          +--rw single-lm-send
+          |  +--rw slm-send-enable?   enable
+          |  +--rw slm-interval?      lm-interval
+          |  +--rw slm-exp?           uint8
+          +--rw single-lm-rcv
+          |  +--rw slm-rcv-enable?   enable
+          +--rw dual-lm
+          |  +--rw dlm-enable?   enable
+          +--ro status-info
+          |  +--ro pw*
+          |  |  +--ro me-index?                 uint32
+          |  |  +--ro me-direction?             me-direction
+          |  |  +--ro me-state?                 me-state
+          |  |  +--ro local-state?              me-state
+          |  |  +--ro remote-state?             me-state
+          |  |  +--ro alarm-indicate?           string
+          |  |  +--ro local-defect-status?      defect-status-type
+          |  |  +--ro local-invalid-time?       uint32
+          |  |  +--ro local-defect-location?    string
+          |  |  +--ro local-defect-type?        defect-type
+          |  |  +--ro remote-defect-status?     defect-status-type
+          |  |  +--ro remote-invalid-time?      uint32
+          |  |  +--ro remote-defect-location?   string
+          |  |  +--ro remote-defect-type?       defect-type
+          |  +--ro lsp*
+          |  |  +--ro me-index?                 uint32
+          |  |  +--ro me-direction?             me-direction
+          |  |  +--ro me-state?                 me-state
+          |  |  +--ro local-state?              me-state
+          |  |  +--ro remote-state?             me-state
+          |  |  +--ro alarm-indicate?           string
+          |  |  +--ro local-defect-status?      defect-status-type
+          |  |  +--ro local-invalid-time?       uint32
+          |  |  +--ro local-defect-location?    string
+          |  |  +--ro local-defect-type?        defect-type
+          |  |  +--ro remote-defect-status?     defect-status-type
+          |  |  +--ro remote-invalid-time?      uint32
+          |  |  +--ro remote-defect-location?   string
+          |  |  +--ro remote-defect-type?       defect-type
+          |  |  +--ro me-index-egress?          uint32
+          |  |  +--ro me-direct-egress?         me-direction
+          |  |  +--ro status-board-egress?      string
+          |  |  +--ro state-egress?             me-state
+          |  |  +--ro alarm-egress?             string
+          |  +--ro section*
+          |  |  +--ro me-index?                 uint32
+          |  |  +--ro me-direction?             me-direction
+          |  |  +--ro me-state?                 me-state
+          |  |  +--ro local-state?              me-state
+          |  |  +--ro remote-state?             me-state
+          |  |  +--ro alarm-indicate?           string
+          |  |  +--ro local-defect-status?      defect-status-type
+          |  |  +--ro local-invalid-time?       uint32
+          |  |  +--ro local-defect-location?    string
+          |  |  +--ro local-defect-type?        defect-type
+          |  |  +--ro remote-defect-status?     defect-status-type
+          |  |  +--ro remote-invalid-time?      uint32
+          |  |  +--ro remote-defect-location?   string
+          |  |  +--ro remote-defect-type?       defect-type
+          |  +--ro pw-spme*
+          |  |  +--ro me-index?       uint32
+          |  |  +--ro me-direction?   me-direction
+          |  |  +--ro me-state?       me-state
+          |  |  +--ro mip-id?         uint16
+          |  +--ro lsp-spme*
+          |     +--ro me-index?       uint32
+          |     +--ro me-direction?   me-direction
+          |     +--ro me-state?       me-state
+          |     +--ro mip-id?         uint16
+          +--ro detect-result
+             +--ro one-way-dm-result
+             |  +--ro send-pkt-num?      uint32
+             |  +--ro recv-pkt-num?      uint32
+             |  +--ro delay-min?         uint32
+             |  +--ro delay-max?         uint32
+             |  +--ro delay-avg?         uint32
+             |  +--ro jitter-min?        uint32
+             |  +--ro jitter-max?        uint32
+             |  +--ro jitter-avg?        uint32
+             |  +--ro one-way-dm-data
+             |     +--ro one-way-dm-data* [index]
+             |        +--ro index            uint32
+             |        +--ro one-delay?       uint32
+             |        +--ro one-delay-var?   uint32
+             |        +--ro error-info?      error-info
+             +--ro one-way-send-result
+             |  +--ro measure-mode?   measure-mode
+             |  +--ro status?         statistics-status
+             +--ro two-way-dm-result
+             |  +--ro measure-mode?      measure-mode
+             |  +--ro status?            statistics-status
+             |  +--ro send-pkt-num?      uint32
+             |  +--ro rcv-pkt-num?       uint32
+             |  +--ro delay-min?         uint32
+             |  +--ro delay-max?         uint32
+             |  +--ro delay-avg?         uint32
+             |  +--ro jitter-min?        uint32
+             |  +--ro jitter-max?        uint32
+             |  +--ro jitter-avg?        uint32
+             |  +--ro two-way-dm-data
+             |     +--ro two-way-dm-data* [index]
+             |        +--ro index            uint32
+             |        +--ro two-delay?       uint32
+             |        +--ro two-delay-var?   uint32
+             |        +--ro error-info?      error-info
+             +--ro single-lm-result
+             |  +--ro measure-mode?         measure-mode
+             |  +--ro status?               statistics-status
+             |  +--ro send-pkt-num?         uint32
+             |  +--ro rcv-pkt-num?          uint32
+             |  +--ro rmt-loss-ratio-min?   uint32
+             |  +--ro rmt-loss-ratio-max?   uint32
+             |  +--ro rmt-loss-atio-avg?    uint32
+             |  +--ro rmt-loss-count-min?   uint32
+             |  +--ro rmt-loss-count-max?   uint32
+             |  +--ro rmt-loss-count-avg?   uint32
+             |  +--ro single-lm-data
+             |     +--ro single-lm-data* [index]
+             |        +--ro index               uint32
+             |        +--ro slm-loss-lcl?       uint32
+             |        +--ro slm-loss-lcl-rat?   string
+             |        +--ro slm-loss-rmt?       uint32
+             |        +--ro slm-loss-rmt-rat?   string
+             |        +--ro error-info?         error-info
+             +--ro dual-lm-data
+                +--ro dual-lm-data* [index]
+                   +--ro index               uint32
+                   +--ro dlm-Loss-lcl?       uint32
+                   +--ro dlm-loss-lcl-rat?   string
+                   +--ro dlm-loss-rmt?       uint32
+                   +--ro dlm-loss-rmt-rat?   string
+                   +--ro error-info?         error-info

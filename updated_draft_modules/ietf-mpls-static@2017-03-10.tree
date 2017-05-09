@@ -1,0 +1,29 @@
+module: ietf-mpls-static
+  augment /rt:routing/mpls:mpls:
+    +--rw static-lsps
+       +--rw static-lsp* [name]
+          +--rw name                  string
+          +--rw in-segment
+          |  +--rw (type)?
+          |  |  +--:(ip-prefix)
+          |  |  |  +--rw ip-prefix?            inet:ip-prefix
+          |  |  +--:(mpls-label)
+          |  |  |  +--rw incoming-label?       rt-types:mpls-label
+          |  |  +--:(tunnel)
+          |  |     +--rw tunnel?               te:tunnel-ref
+          |  +--rw incoming-interface?   if:interface-ref
+          +--rw operation?            enumeration
+          +--rw (out-segment)?
+             +--:(simple-path)
+             |  +--rw next-hop?             inet:ip-address
+             |  +--rw outgoing-label?       rt-types:mpls-label
+             |  +--rw outgoing-interface?   if:interface-ref
+             +--:(path-list)
+                +--rw paths* [path-index]
+                   +--rw path-index            uint16
+                   +--rw backup-path-index?    uint16
+                   +--rw next-hop?             inet:ip-address
+                   +--rw outgoing-labels*      rt-types:mpls-label
+                   +--rw outgoing-interface?   if:interface-ref
+                   +--rw loadshare?            uint16
+                   +--rw role?                 enumeration

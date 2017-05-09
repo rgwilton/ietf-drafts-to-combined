@@ -1,0 +1,174 @@
+module: ietf-mpls-ldp-extended
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global:
+    +--rw forwarding-nexthop {forwarding-nexthop-config}?
+       +--rw interfaces
+          +--rw interface* [interface]
+             +--rw interface         ldp:mpls-interface-ref
+             +--rw address-family* [afi]
+                +--rw afi            ldp:ldp-address-family
+                +--rw ldp-disable?   boolean
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:address-families:
+    +--rw ipv6!
+       +--rw enable?                           boolean
+       +--rw label-policy
+       |  +--rw advertise
+       |  |  +--rw egress-explicit-null
+       |  |  |  +--rw enable?   boolean
+       |  |  +--rw prefix-list?            prefix-list-ref
+       |  +--rw accept
+       |  |  +--rw prefix-list?   prefix-list-ref
+       |  +--rw assign {policy-label-assignment-config}?
+       |     +--rw independent-mode
+       |     |  +--rw prefix-list?   prefix-list-ref
+       |     +--rw ordered-mode {policy-ordered-label-config}?
+       |        +--rw egress-prefix-list?   prefix-list-ref
+       +--ro label-distribution-controlmode?   enumeration
+       +--ro bindings
+       |  +--ro address* [address]
+       |  |  +--ro address               inet:ipv6-address
+       |  |  +--ro advertisement-type?   advertised-received
+       |  |  +--ro peer?                 -> ../../../../../../ldp:peers/peer/lsr-id
+       |  +--ro fec-label* [fec]
+       |     +--ro fec     inet:ipv6-prefix
+       |     +--ro peer* [peer advertisement-type]
+       |        +--ro peer                  -> ../../../../../../../ldp:peers/peer/lsr-id
+       |        +--ro advertisement-type    advertised-received
+       |        +--ro label?                rt-types:mpls-label
+       |        +--ro used-in-forwarding?   boolean
+       +--rw transport-address                 inet:ipv6-address
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:discovery/ldp:interfaces/ldp:interface/ldp:address-families:
+    +--rw ipv6!
+       +--rw enable?              boolean
+       +--ro hello-adjacencies* [adjacent-address]
+       |  +--ro adjacent-address    inet:ipv6-address
+       |  +--ro flag*               identityref
+       |  +--ro hello-holdtime
+       |  |  +--ro adjacent?     uint16
+       |  |  +--ro negotiated?   uint16
+       |  |  +--ro remaining?    uint16
+       |  +--ro next-hello?         uint16
+       |  +--ro statistics
+       |  |  +--ro discontinuity-time    yang:date-and-time
+       |  |  +--ro hello-received?       yang:counter64
+       |  |  +--ro hello-dropped?        yang:counter64
+       |  +--ro peer?               -> ../../../../../../../../ldp:peers/peer/lsr-id
+       +--rw transport-address?   union
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:discovery/ldp:targeted/ldp:address-families:
+    +--rw ipv6!
+       +--ro hello-adjacencies* [local-address adjacent-address]
+       |  +--ro local-address       inet:ipv6-address
+       |  +--ro adjacent-address    inet:ipv6-address
+       |  +--ro flag*               identityref
+       |  +--ro hello-holdtime
+       |  |  +--ro adjacent?     uint16
+       |  |  +--ro negotiated?   uint16
+       |  |  +--ro remaining?    uint16
+       |  +--ro next-hello?         uint16
+       |  +--ro statistics
+       |  |  +--ro discontinuity-time    yang:date-and-time
+       |  |  +--ro hello-received?       yang:counter64
+       |  |  +--ro hello-dropped?        yang:counter64
+       |  +--ro peer?               -> ../../../../../../../ldp:peers/peer/lsr-id
+       +--rw target* [adjacent-address]
+          +--rw adjacent-address    inet:ipv6-address
+          +--rw enable?             boolean
+          +--rw local-address?      inet:ipv6-address
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:peers/ldp:peer/ldp:address-families:
+    +--ro ipv6!
+       +--ro hello-adjacencies* [local-address adjacent-address]
+       |  +--ro local-address       inet:ipv6-address
+       |  +--ro adjacent-address    inet:ipv6-address
+       |  +--ro flag*               identityref
+       |  +--ro hello-holdtime
+       |  |  +--ro adjacent?     uint16
+       |  |  +--ro negotiated?   uint16
+       |  |  +--ro remaining?    uint16
+       |  +--ro next-hello?         uint16
+       |  +--ro statistics
+       |  |  +--ro discontinuity-time    yang:date-and-time
+       |  |  +--ro hello-received?       yang:counter64
+       |  |  +--ro hello-dropped?        yang:counter64
+       |  +--ro interface?          ldp:mpls-interface-ref
+       +--ro label-policy
+          +--ro advertise
+          |  +--ro prefix-list?   prefix-list-ref
+          +--ro accept
+             +--ro prefix-list?   prefix-list-ref
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global:
+    +--rw igp-synchronization-delay?   uint16
+    +--rw label-policy
+       +--rw advertise
+          +--rw egress-explicit-null
+             +--rw enable?   boolean
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:capability:
+    +--rw end-of-lib {capability-end-of-lib}?
+    |  +--rw enable?   boolean
+    +--rw typed-wildcard-fec {capability-typed-wildcard-fec}?
+    |  +--rw enable?   boolean
+    +--rw upstream-label-assignment {capability-upstream-label-assignment}?
+       +--rw enable?   boolean
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:graceful-restart:
+    +--rw helper-enable?   boolean {graceful-restart-helper-mode}?
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:address-families/ldp:ipv4/ldp:label-policy:
+    +--rw accept
+    |  +--rw prefix-list?   prefix-list-ref
+    +--rw assign {policy-label-assignment-config}?
+       +--rw independent-mode
+       |  +--rw prefix-list?   prefix-list-ref
+       +--rw ordered-mode {policy-ordered-label-config}?
+          +--rw egress-prefix-list?   prefix-list-ref
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:address-families/ldp:ipv4/ldp:label-policy/ldp:advertise:
+    +--rw prefix-list?   prefix-list-ref
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:address-families/ldp:ipv4:
+    +--rw transport-address?   inet:ipv4-address
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:discovery/ldp:interfaces/ldp:interface:
+    +--rw hello-holdtime?              uint16
+    +--rw hello-interval?              uint16
+    +--rw igp-synchronization-delay?   uint16 {per-interface-timer-config}?
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:discovery/ldp:interfaces/ldp:interface/ldp:address-families/ldp:ipv4:
+    +--rw transport-address?   union
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:discovery/ldp:targeted/ldp:hello-accept:
+    +--rw neighbor-list?   neighbor-list-ref {policy-targeted-discovery-config}?
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:peers:
+    +--rw session-downstream-on-demand {session-downstream-on-demand-config}?
+       +--rw enable?      boolean
+       +--rw peer-list?   peer-list-ref
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:peers/ldp:authentication/ldp:auth-type-selection:
+    +--:(auth-key-chain)
+       +--rw key-chain?   key-chain:key-chain-ref
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:peers/ldp:peer:
+    +--rw admin-down?            boolean
+    +--rw label-policy
+    |  +--rw advertise
+    |  |  +--rw prefix-list?   prefix-list-ref
+    |  +--rw accept
+    |     +--rw prefix-list?   prefix-list-ref
+    +--rw graceful-restart
+    |  +--rw enable?           boolean
+    |  +--rw reconnect-time?   uint16
+    |  +--rw recovery-time?    uint16
+    +--rw session-ka-holdtime?   uint16
+    +--rw session-ka-interval?   uint16
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:peers/ldp:peer/ldp:authentication/ldp:auth-type-selection:
+    +--:(auth-key-chain)
+       +--rw key-chain?   key-chain:key-chain-ref
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:peers/ldp:peer:
+    +--rw address-families
+       +--rw ipv4
+       |  +--rw label-policy
+       |     +--rw advertise
+       |     |  +--rw prefix-list?   prefix-list-ref
+       |     +--rw accept
+       |        +--rw prefix-list?   prefix-list-ref
+       +--rw ipv6
+          +--rw label-policy
+             +--rw advertise
+             |  +--rw prefix-list?   prefix-list-ref
+             +--rw accept
+                +--rw prefix-list?   prefix-list-ref
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:peers/ldp:peer/ldp:address-families/ldp:ipv4:
+    +--ro label-policy
+       +--ro advertise
+       |  +--ro prefix-list?   prefix-list-ref
+       +--ro accept
+          +--ro prefix-list?   prefix-list-ref

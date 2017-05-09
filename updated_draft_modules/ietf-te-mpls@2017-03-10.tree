@@ -1,0 +1,15 @@
+module: ietf-te-mpls
+  augment /te:te/te:tunnels/te:tunnel:
+    +--rw tunnel-igp-shortcut
+    |  +--rw shortcut-eligible?   boolean
+    |  +--rw metric-type?         identityref
+    |  +--rw metric?              int32
+    |  +--rw routing-afs*         inet:ip-version
+    +--rw forwarding
+       +--rw binding-label?   rt-types:mpls-label
+       +--rw load-share?      uint32
+       +--rw policy-class?    uint8
+  augment /te:te/te:tunnels/te:tunnel/te:p2p-primary-paths/te:p2p-primary-path:
+    +--rw static-lsp-name?   mpls-static:static-lsp-ref
+  augment /te:te/te:tunnels/te:tunnel/te:p2p-secondary-paths/te:p2p-secondary-path:
+    +--rw static-lsp-name?   mpls-static:static-lsp-ref

@@ -1,0 +1,91 @@
+module: ietf-ipv6-unicast-routing
+  augment /rt:routing/rt:ribs/rt:rib/rt:routes/rt:route:
+    +--ro destination-prefix?   inet:ipv6-prefix
+  augment /rt:routing/rt:ribs/rt:rib/rt:routes/rt:route/rt:next-hop/rt:next-hop-options/rt:simple-next-hop:
+    +--ro next-hop-address?   inet:ipv6-address
+  augment /rt:routing/rt:ribs/rt:rib/rt:routes/rt:route/rt:next-hop/rt:next-hop-options/rt:next-hop-list/rt:next-hop-list/rt:next-hop:
+    +--ro address?   inet:ipv6-address
+  augment /rt:routing/rt:ribs/rt:rib/rt:active-route/rt:input:
+    +---- destination-address?   inet:ipv6-address
+  augment /rt:routing/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route:
+    +---- destination-prefix?   inet:ipv6-prefix
+  augment /rt:routing/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route/rt:next-hop/rt:next-hop-options/rt:simple-next-hop:
+    +---- next-hop-address?   inet:ipv6-address
+  augment /rt:routing/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route/rt:next-hop/rt:next-hop-options/rt:next-hop-list/rt:next-hop-list/rt:next-hop:
+    +---- next-hop-address?   inet:ipv6-address
+  augment /rt:routing/rt:control-plane-protocols/rt:control-plane-protocol/rt:static-routes:
+    +--rw ipv6
+       +--rw route* [destination-prefix]
+          +--rw destination-prefix    inet:ipv6-prefix
+          +--rw description?          string
+          +--rw next-hop
+             +--rw (next-hop-options)
+                +--:(simple-next-hop)
+                |  +--rw outgoing-interface?   if:interface-ref
+                |  +--rw next-hop-address?     inet:ipv6-address
+                +--:(special-next-hop)
+                |  +--rw special-next-hop?     enumeration
+                +--:(next-hop-list)
+                   +--rw next-hop-list
+                      +--rw next-hop* [index]
+                         +--rw index                 string
+                         +--rw outgoing-interface?   if:interface-ref
+                         +--rw next-hop-address?     inet:ipv6-address
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:routes/rt:route:
+    x--ro destination-prefix?   inet:ipv6-prefix
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:routes/rt:route/rt:next-hop/rt:next-hop-options/rt:simple-next-hop:
+    x--ro next-hop-address?   inet:ipv6-address
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:routes/rt:route/rt:next-hop/rt:next-hop-options/rt:next-hop-list/rt:next-hop-list/rt:next-hop:
+    x--ro address?   inet:ipv6-address
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:active-route/rt:input:
+    x---- destination-address?   inet:ipv6-address
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route:
+    x---- destination-prefix?   inet:ipv6-prefix
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route/rt:next-hop/rt:next-hop-options/rt:simple-next-hop:
+    x---- next-hop-address?   inet:ipv6-address
+  augment /rt:routing-state/rt:ribs/rt:rib/rt:active-route/rt:output/rt:route/rt:next-hop/rt:next-hop-options/rt:next-hop-list/rt:next-hop-list/rt:next-hop:
+    x---- next-hop-address?   inet:ipv6-address
+  augment /if:interfaces-state/if:interface/ip:ipv6:
+    x--ro ipv6-router-advertisements
+       x--ro send-advertisements?    boolean
+       x--ro max-rtr-adv-interval?   uint16
+       x--ro min-rtr-adv-interval?   uint16
+       x--ro managed-flag?           boolean
+       x--ro other-config-flag?      boolean
+       x--ro link-mtu?               uint32
+       x--ro reachable-time?         uint32
+       x--ro retrans-timer?          uint32
+       x--ro cur-hop-limit?          uint8
+       x--ro default-lifetime?       uint16
+       x--ro prefix-list
+          x--ro prefix* [prefix-spec]
+             x--ro prefix-spec           inet:ipv6-prefix
+             x--ro valid-lifetime?       uint32
+             x--ro on-link-flag?         boolean
+             x--ro preferred-lifetime?   uint32
+             x--ro autonomous-flag?      boolean
+  augment /if:interfaces/if:interface/ip:ipv6:
+    +--rw ipv6-router-advertisements
+       +--rw send-advertisements?        boolean
+       +--rw max-rtr-adv-interval?       uint16
+       +--rw min-rtr-adv-interval?       uint16
+       +--rw managed-flag?               boolean
+       +--rw other-config-flag?          boolean
+       +--rw link-mtu?                   uint32
+       +--rw reachable-time?             uint32
+       +--rw retrans-timer?              uint32
+       +--rw cur-hop-limit?              uint8
+       +--rw default-lifetime?           uint16
+       +--rw no-advertise-prefix-list
+       |  +--rw prefix* [prefix-spec]
+       |     +--rw prefix-spec     inet:ipv6-prefix
+       |     +--rw (control-adv-prefixes)?
+       |        +--:(no-advertise)
+       |           +--rw no-advertise?   empty
+       +--rw prefix-list
+          +--rw prefix* [prefix-spec]
+             +--rw prefix-spec           inet:ipv6-prefix
+             +--ro valid-lifetime?       uint32
+             +--ro on-link-flag?         boolean
+             +--ro preferred-lifetime?   uint32
+             +--ro autonomous-flag?      boolean

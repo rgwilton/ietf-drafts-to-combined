@@ -1,0 +1,26 @@
+module: ietf-transport-service
+    +--rw transport_service
+       +--rw service* [service-name]
+          +--rw service-name         string
+          +--rw service-id?          uint32
+          +--rw service-endpoints* [node-id tp-id]
+          |  +--rw type?            enumeration
+          |  +--rw node-id          union
+          |  +--rw tp-id            uint32
+          |  +--rw endpoint-name?   string
+          +--rw service-type         identityref
+          +--rw supporting-tunnel
+          |  +--rw tunnel-name?   string
+          +--rw bandwidth?           decimal64
+          +--rw protection-type?     identityref
+          +--rw constraints
+          |  +--rw delay-limit?            uint32
+          |  +--rw delayvariation-limit?   uint32
+          |  +--rw packetloss-limit?       decimal64
+          |  +--rw objective?              identityref
+          +--ro creation-time?       ytypes:date-and-time
+          +--ro performance-info
+          |  +--ro delay?             uint32
+          |  +--ro delay-variation?   uint32
+          |  +--ro packet-loss?       decimal64
+          +--rw oper-status          tet:te-oper-status

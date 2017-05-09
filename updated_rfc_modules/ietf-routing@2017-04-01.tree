@@ -1,0 +1,94 @@
+module: ietf-routing
+    +--rw routing
+    |  +--rw router-id?                 yang:dotted-quad
+    |  +--ro interfaces
+    |  |  +--ro interface*   if:interface-ref
+    |  +--rw control-plane-protocols
+    |  |  +--rw control-plane-protocol* [type name]
+    |  |     +--rw type             identityref
+    |  |     +--rw name             string
+    |  |     +--rw description?     string
+    |  |     +--rw static-routes
+    |  +--rw ribs
+    |     +--rw rib* [name]
+    |        +--rw name              string
+    |        +--rw address-family?   identityref
+    |        +--rw description?      string
+    |        +--ro default-rib?      boolean {multiple-ribs}?
+    |        +--ro routes
+    |        |  +--ro route*
+    |        |     +--ro route-preference?   route-preference
+    |        |     +--ro next-hop
+    |        |     |  +--ro (next-hop-options)
+    |        |     |     +--:(simple-next-hop)
+    |        |     |     |  +--ro outgoing-interface?   if:interface-ref
+    |        |     |     +--:(special-next-hop)
+    |        |     |     |  +--ro special-next-hop?     enumeration
+    |        |     |     +--:(next-hop-list)
+    |        |     |        +--ro next-hop-list
+    |        |     |           +--ro next-hop*
+    |        |     |              +--ro outgoing-interface?   if:interface-ref
+    |        |     +--ro source-protocol     identityref
+    |        |     +--ro active?             empty
+    |        |     +--ro last-updated?       yang:date-and-time
+    |        +---x active-route
+    |           +--ro output
+    |              +--ro route
+    |                 +--ro next-hop
+    |                 |  +--ro (next-hop-options)
+    |                 |     +--:(simple-next-hop)
+    |                 |     |  +--ro outgoing-interface?   if:interface-ref
+    |                 |     +--:(special-next-hop)
+    |                 |     |  +--ro special-next-hop?     enumeration
+    |                 |     +--:(next-hop-list)
+    |                 |        +--ro next-hop-list
+    |                 |           +--ro next-hop*
+    |                 |              +--ro outgoing-interface?   if:interface-ref
+    |                 +--ro source-protocol    identityref
+    |                 +--ro active?            empty
+    |                 +--ro last-updated?      yang:date-and-time
+    x--ro routing-state
+       +--ro router-id?                 yang:dotted-quad
+       x--ro interfaces
+       |  x--ro interface*   if:interface-state-ref
+       x--ro control-plane-protocols
+       |  x--ro control-plane-protocol* [type name]
+       |     x--ro type    identityref
+       |     x--ro name    string
+       x--ro ribs
+          x--ro rib* [name]
+             x--ro name              string
+             +--ro address-family    identityref
+             x--ro default-rib?      boolean {multiple-ribs}?
+             x--ro routes
+             |  x--ro route*
+             |     x--ro route-preference?   route-preference
+             |     x--ro next-hop
+             |     |  x--ro (next-hop-options)
+             |     |     x--:(simple-next-hop)
+             |     |     |  x--ro outgoing-interface?   if:interface-state-ref
+             |     |     x--:(special-next-hop)
+             |     |     |  +--ro special-next-hop?     enumeration
+             |     |     x--:(next-hop-list)
+             |     |        x--ro next-hop-list
+             |     |           x--ro next-hop*
+             |     |              x--ro outgoing-interface?   if:interface-state-ref
+             |     +--ro source-protocol     identityref
+             |     +--ro active?             empty
+             |     +--ro last-updated?       yang:date-and-time
+             x---x active-route
+                +--ro output
+                   x--ro route
+                      x--ro next-hop
+                      |  x--ro (next-hop-options)
+                      |     x--:(simple-next-hop)
+                      |     |  x--ro outgoing-interface?   if:interface-state-ref
+                      |     x--:(special-next-hop)
+                      |     |  +--ro special-next-hop?     enumeration
+                      |     x--:(next-hop-list)
+                      |        x--ro next-hop-list
+                      |           x--ro next-hop*
+                      |              x--ro outgoing-interface?   if:interface-state-ref
+                      +--ro source-protocol    identityref
+                      +--ro active?            empty
+                      +--ro last-updated?      yang:date-and-time

@@ -1,0 +1,71 @@
+module: ietf-mpls-mldp
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global/ldp:capability:
+    +--rw mldp
+       +--rw p2mp
+       |  +--rw enable?   boolean
+       +--rw mp2mp
+       |  +--rw enable?   boolean
+       +--rw make-before-break
+          +--rw enable?             boolean
+          +--rw switchover-delay?   uint16
+          +--rw timeout?            uint16
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:peers/ldp:peer/ldp:received-peer-state/ldp:capability:
+    +--ro mldp
+       +--ro p2mp
+       |  +--ro enable?   boolean
+       +--ro mp2mp
+       |  +--ro enable?   boolean
+       +--ro make-before-break
+          +--ro enable?   boolean
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:global:
+    +--rw mldp
+       +--rw enable?             boolean
+       +--rw address-families
+          +--rw ipv4
+             +--ro roots
+             |  +--ro root* [root-address]
+             |     +--ro root-address    inet:ipv4-address
+             |     +--ro is-self?        boolean
+             |     +--ro reachability* [address interface]
+             |     |  +--ro address      inet:ipv4-address
+             |     |  +--ro interface    ldp:mpls-interface-ref
+             |     |  +--ro peer?        -> ../../../../../../../../ldp:peers/peer/lsr-id
+             |     +--ro bindings
+             |        +--ro opaque-type-lspid
+             |           +--ro fec-label* [lsp-id]
+             |              +--ro lsp-id             uint32
+             |              +--ro multipoint-type?   multipoint-type
+             |              +--ro peer* [direction peer advertisement-type]
+             |                 +--ro direction             ldp:downstream-upstream
+             |                 +--ro peer                  -> /rt:routing/control-plane-protocols/ldp:mpls-ldp/peers/peer/lsr-id
+             |                 +--ro advertisement-type    ldp:advertised-received
+             |                 +--ro label?                rt-types:mpls-label
+             |                 +--ro mbb-role?             enumeration
+             +--rw configured-leaf-lsps
+                +--rw p2mp
+                |  +--rw roots
+                |     +--rw root* [root-address]
+                |        +--rw root-address         inet:ipv4-address
+                |        +--rw (lsp-key-type)?
+                |           +--:(lsp-id)
+                |              +--rw opaque-type-lspid
+                |                 +--rw lsp* [lsp-id]
+                |                    +--rw lsp-id    uint16
+                +--rw mp2mp
+                   +--rw roots
+                      +--rw root* [root-address]
+                         +--rw root-address         inet:ipv4-address
+                         +--rw (lsp-key-type)?
+                            +--:(lsp-id)
+                               +--rw opaque-type-lspid
+                                  +--rw lsp* [lsp-id]
+                                     +--rw lsp-id    uint16
+
+  notifications:
+    +---n mpls-mldp-fec-event
+       +--ro event-type?   ldp:oper-status-event-type
+       +--ro tree-type?    multipoint-type
+       +--ro root?         inet:ip-address
+       +--ro (lsp-key-type)?
+          +--:(lsp-id)
+             +--ro lsp-id?       uint16

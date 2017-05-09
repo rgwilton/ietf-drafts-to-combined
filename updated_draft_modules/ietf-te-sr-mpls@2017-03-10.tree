@@ -1,0 +1,4 @@
+module: ietf-te-sr-mpls
+  augment /te:te/te:globals/te:named-path-constraints/te:named-path-constraint:
+    +--rw sid-selection-mode?   te-sid-selection-mode
+    +--rw sid-protection?       identityref

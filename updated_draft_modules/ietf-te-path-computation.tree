@@ -1,0 +1,89 @@
+module: ietf-te-path-computation
+    +--rw paths
+    |  +--ro path* [path-id]
+    |     +--ro _telink* [link-ref]
+    |     |  +--ro link-ref    -> /nd:networks/network[nd:network-id=current()/../network-ref]/lnk:link/link-id
+    |     +--ro _routingConstraint
+    |     |  +--ro requestedCapacity?   tet:te-bandwidth
+    |     |  +--ro pathConstraints
+    |     |  +--ro _avoidTopology
+    |     |     +--ro network-ref?   -> /nw:networks/network/network-id
+    |     +--ro path-id               yang-types:uuid
+    +--rw pathComputationService
+       +--ro _path-ref*                 -> /paths/path/path-id
+       +--rw _servicePort
+       |  +--rw source?        inet:ip-address
+       |  +--rw destination?   inet:ip-address
+       |  +--rw src-tp-id?     binary
+       |  +--rw dst-tp-id?     binary
+       +--rw _routingConstraint
+       |  +--ro requestedCapacity?   tet:te-bandwidth
+       |  +--ro pathConstraints
+       |  +--ro _avoidTopology
+       |     +--ro network-ref?   -> /nw:networks/network/network-id
+       +--rw _objectiveFunction
+       |  +--ro objectiveFunction?   ObjectiveFunction
+       +--rw _optimizationConstraint
+          +--ro trafficInterruption?   DirectiveValue
+
+  rpcs:
+    +---x statelessComputeP2PPath
+    |  +---w input
+    |  |  +---w servicePort*
+    |  |  |  +---w source?        inet:ip-address
+    |  |  |  +---w destination?   inet:ip-address
+    |  |  |  +---w src-tp-id?     binary
+    |  |  |  +---w dst-tp-id?     binary
+    |  |  +---w routingConstraint
+    |  |  |  +---w requestedCapacity?   tet:te-bandwidth
+    |  |  |  +---w pathConstraints
+    |  |  |  +---w _avoidTopology
+    |  |  |     +---w network-ref?   -> /nw:networks/network/network-id
+    |  |  +---w objectiveFunction
+    |  |     +---w objectiveFunction?   ObjectiveFunction
+    |  +--ro output
+    |     +--ro pathCompService
+    |        +--ro _path-ref*                 -> /paths/path/path-id
+    |        +--ro _servicePort
+    |        |  +--ro source?        inet:ip-address
+    |        |  +--ro destination?   inet:ip-address
+    |        |  +--ro src-tp-id?     binary
+    |        |  +--ro dst-tp-id?     binary
+    |        +--ro _routingConstraint
+    |        |  +--ro requestedCapacity?   tet:te-bandwidth
+    |        |  +--ro pathConstraints
+    |        |  +--ro _avoidTopology
+    |        |     +--ro network-ref?   -> /nw:networks/network/network-id
+    |        +--ro _objectiveFunction
+    |        |  +--ro objectiveFunction?   ObjectiveFunction
+    |        +--ro _optimizationConstraint
+    |           +--ro trafficInterruption?   DirectiveValue
+    +---x optimizeP2PPath
+       +---w input
+       |  +---w pathIdOrName?             string
+       |  +---w routingConstraint
+       |  |  +---w requestedCapacity?   tet:te-bandwidth
+       |  |  +---w pathConstraints
+       |  |  +---w _avoidTopology
+       |  |     +---w network-ref?   -> /nw:networks/network/network-id
+       |  +---w optimizationConstraint
+       |  |  +---w trafficInterruption?   DirectiveValue
+       |  +---w objectiveFunction
+       |     +---w objectiveFunction?   ObjectiveFunction
+       +--ro output
+          +--ro pathCompService
+             +--ro _path-ref*                 -> /paths/path/path-id
+             +--ro _servicePort
+             |  +--ro source?        inet:ip-address
+             |  +--ro destination?   inet:ip-address
+             |  +--ro src-tp-id?     binary
+             |  +--ro dst-tp-id?     binary
+             +--ro _routingConstraint
+             |  +--ro requestedCapacity?   tet:te-bandwidth
+             |  +--ro pathConstraints
+             |  +--ro _avoidTopology
+             |     +--ro network-ref?   -> /nw:networks/network/network-id
+             +--ro _objectiveFunction
+             |  +--ro objectiveFunction?   ObjectiveFunction
+             +--ro _optimizationConstraint
+                +--ro trafficInterruption?   DirectiveValue

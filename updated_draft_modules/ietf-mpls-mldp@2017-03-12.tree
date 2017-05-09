@@ -9,7 +9,7 @@ module: ietf-mpls-mldp
           +--rw enable?             boolean
           +--rw switchover-delay?   uint16
           +--rw timeout?            uint16
-  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:peers/ldp:peer/ldp:received-peer-state/ldp:capability:
+  augment /rt:routing/rt:control-plane-protocols/ldp:mpls-ldp/ldp:peers/ldp:peer/ldp:received-peer/ldp:capability:
     +--ro mldp
        +--ro p2mp
        |  +--ro enable?   boolean

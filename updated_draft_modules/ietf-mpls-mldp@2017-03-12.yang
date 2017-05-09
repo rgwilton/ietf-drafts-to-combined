@@ -278,7 +278,7 @@ module ietf-mpls-mldp {
    */
   augment "/rt:routing/rt:control-plane-protocols/"
     + "ldp:mpls-ldp/ldp:peers/ldp:peer/"
-    + "ldp:received-peer-state/ldp:capability" {
+    + "ldp:received-peer/ldp:capability" {
     description
       "Augmentation for MLDP received peer state capability.";
     container mldp {

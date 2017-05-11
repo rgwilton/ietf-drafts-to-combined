@@ -1,64 +1,63 @@
-module ietf-network-topology {
+module ietf-network-topology-state {
   yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-network-topology";
-  prefix lnk;
+  namespace 
+    "urn:ietf:params:xml:ns:yang:ietf-network-topology-state";
+  prefix lnk-s;
 
-  import ietf-inet-types {
-    prefix inet;
+  import ietf-network-state {
+    prefix nd-s;
   }
-  import ietf-network {
-    prefix nd;
+  import ietf-network-topology {
+    prefix lnk;
   }
 
   organization
     "IETF I2RS (Interface to the Routing System) Working Group";
-
   contact
     "WG Web:    <http://tools.ietf.org/wg/i2rs/>
      WG List:   <mailto:i2rs@ietf.org>
-
+     
      WG Chair:  Susan Hares
                 <mailto:shares@ndzh.com>
-
+     
      WG Chair:  Russ White
                 <mailto:russ@riw.us>
-
+     
      Editor:    Alexander Clemm
                 <mailto:ludwig@clemm.org>
      Editor:    Jan Medved
                 <mailto:jmedved@cisco.com>
-
+     
      Editor:    Robert Varga
                 <mailto:robert.varga@pantheon.sk>
-
+     
      Editor:    Nitin Bahadur
                 <mailto:nitin_bahadur@yahoo.com>
-
+     
      Editor:    Hariharan Ananthakrishnan
                 <mailto:hari@packetdesign.com>
-
+     
      Editor:    Xufeng Liu
                 <mailto:Xufeng_Liu@jabil.com>";
-
   description
     "This module defines a common base model for network topology,
      augmenting the base network model with links to connect nodes,
      as well as termination points to terminate links on nodes.
-
+     
      Copyright (c) 2017 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
-
+     
      Redistribution and use in source and binary forms, with or
      without modification, is permitted pursuant to, and subject
      to the license terms contained in, the Simplified BSD License
      set forth in Section 4.c of the IETF Trust's Legal Provisions
      Relating to IETF Documents
      (http://trustee.ietf.org/license-info).
-
+     
      This version of this YANG module is part of
      draft-ietf-i2rs-yang-network-topo-12;
      see the RFC itself for full legal notices.
-
+     
      NOTE TO RFC EDITOR: Please replace above reference to
      draft-ietf-i2rs-yang-network-topo-12 with RFC
      number when published (i.e. RFC xxxx).";
@@ -69,38 +68,7 @@ module ietf-network-topology {
        NOTE TO RFC EDITOR: Please replace the following reference
        to draft-ietf-i2rs-yang-network-topo-12 with
        RFC number when published (i.e. RFC xxxx).";
-    reference
-      "draft-ietf-i2rs-yang-network-topo-12";
-  }
-
-  typedef link-id {
-    type inet:uri;
-    description
-      "An identifier for a link in a topology.
-       The precise structure of the link-id
-       will be up to the implementation.
-       The identifier SHOULD be chosen such that the same link in a
-       real network topology will always be identified through the
-       same identifier, even if the model is instantiated in
-       separate datastores. An implementation MAY choose to capture
-       semantics in the identifier, for example to indicate the type
-       of link and/or the type of topology that the link is a part
-       of.";
-  }
-
-  typedef tp-id {
-    type inet:uri;
-    description
-      "An identifier for termination points (TPs) on a node.
-       The precise structure of the tp-id
-       will be up to the implementation.
-       The identifier SHOULD be chosen such that the same termination
-       point in a real network topology will always be identified
-       through the same identifier, even if the model is instantiated
-       in separate datastores. An implementation MAY choose to
-       capture semantics in the identifier, for example to indicate
-       the type of termination point and/or the type of node
-       that contains the termination point.";
+    reference "draft-ietf-i2rs-yang-network-topo-12";
   }
 
   grouping link-ref {
@@ -108,8 +76,9 @@ module ietf-network-topology {
       "References a link in a specific network.";
     leaf link-ref {
       type leafref {
-        path "/nd:networks/nd:network[nd:network-id=current()/../"+
-          "network-ref]/lnk:link/lnk:link-id";
+        path 
+          "/nd-s:networks/nd-s:network[nd-s:network-id=current()/" +
+          "../network-ref]/lnk-s:link/lnk-s:link-id";
         require-instance false;
       }
       description
@@ -117,7 +86,7 @@ module ietf-network-topology {
          (This type should not be used for relative references.
          In such a case, a relative path should be used instead.)";
     }
-    uses nd:network-ref;
+    uses nd-s:network-ref;
   }
 
   grouping tp-ref {
@@ -125,9 +94,10 @@ module ietf-network-topology {
       "References a termination point in a specific node.";
     leaf tp-ref {
       type leafref {
-        path "/nd:networks/nd:network[nd:network-id=current()/../"+
-          "network-ref]/nd:node[nd:node-id=current()/../"+
-          "node-ref]/lnk:termination-point/lnk:tp-id";
+        path 
+          "/nd-s:networks/nd-s:network[nd-s:network-id=current()/" +
+          "../network-ref]/nd-s:node[nd-s:node-id=current()/../" + 
+          "node-ref]/lnk-s:termination-point/lnk-s:tp-id";
         require-instance false;
       }
       description
@@ -135,10 +105,10 @@ module ietf-network-topology {
          (This type should not be used for relative references.
          In such a case, a relative path should be used instead.)";
     }
-    uses nd:node-ref;
+    uses nd-s:node-ref;
   }
 
-  augment "/nd:networks/nd:network" {
+  augment "/nd-s:networks/nd-s:network" {
     description
       "Add links to the network model.";
     list link {
@@ -160,7 +130,7 @@ module ietf-network-topology {
            link.";
         leaf source-node {
           type leafref {
-            path "../../../nd:node/nd:node-id";
+            path "../../../nd-s:node/nd-s:node-id";
             require-instance false;
           }
           description
@@ -168,7 +138,8 @@ module ietf-network-topology {
         }
         leaf source-tp {
           type leafref {
-            path "../../../nd:node[nd:node-id=current()/../"+
+            path 
+              "../../../nd-s:node[nd-s:node-id=current()/../" + 
               "source-node]/termination-point/tp-id";
             require-instance false;
           }
@@ -183,8 +154,8 @@ module ietf-network-topology {
            particular link.";
         leaf dest-node {
           type leafref {
-            path "../../../nd:node/nd:node-id";
-          require-instance false;
+            path "../../../nd-s:node/nd-s:node-id";
+            require-instance false;
           }
           description
             "Destination node identifier, must be in the same
@@ -192,7 +163,8 @@ module ietf-network-topology {
         }
         leaf dest-tp {
           type leafref {
-            path "../../../nd:node[nd:node-id=current()/../"+
+            path
+              "../../../nd-s:node[nd-s:node-id=current()/../" + 
               "dest-node]/termination-point/tp-id";
             require-instance false;
           }
@@ -202,7 +174,7 @@ module ietf-network-topology {
         }
       }
       leaf link-id {
-        type link-id;
+        type lnk:link-id;
         description
           "The identifier of a link in the topology.
            A link is specific to a topology to which it belongs.";
@@ -214,8 +186,8 @@ module ietf-network-topology {
            is dependent on.";
         leaf network-ref {
           type leafref {
-            path "../../../nd:supporting-network/nd:network-ref";
-          require-instance false;
+            path "../../../nd-s:supporting-network/nd-s:network-ref";
+            require-instance false;
           }
           description
             "This leaf identifies in which underlay topology
@@ -223,8 +195,10 @@ module ietf-network-topology {
         }
         leaf link-ref {
           type leafref {
-            path "/nd:networks/nd:network[nd:network-id=current()/"+
-              "../network-ref]/link/link-id";
+            path
+              "/nd-s:networks/nd-s:network" +
+              "[nd-s:network-id=current()/../network-ref]/link/" +
+              "link-id";
             require-instance false;
           }
           description
@@ -236,7 +210,7 @@ module ietf-network-topology {
       }
     }
   }
-  augment "/nd:networks/nd:network/nd:node" {
+  augment "/nd-s:networks/nd-s:network/nd-s:node" {
     description
       "Augment termination points which terminate links.
        Termination points can ultimately be mapped to interfaces.";
@@ -247,7 +221,7 @@ module ietf-network-topology {
          Depending on the type of topology, a termination point
          could, for example, refer to a port or an interface.";
       leaf tp-id {
-        type tp-id;
+        type lnk:tp-id;
         description
           "Termination point identifier.";
       }
@@ -266,8 +240,8 @@ module ietf-network-topology {
            implementing system.";
         leaf network-ref {
           type leafref {
-            path "../../../nd:supporting-node/nd:network-ref";
-          require-instance false;
+            path "../../../nd-s:supporting-node/nd-s:network-ref";
+            require-instance false;
           }
           description
             "This leaf identifies in which topology the
@@ -275,8 +249,8 @@ module ietf-network-topology {
         }
         leaf node-ref {
           type leafref {
-            path "../../../nd:supporting-node/nd:node-ref";
-          require-instance false;
+            path "../../../nd-s:supporting-node/nd-s:node-ref";
+            require-instance false;
           }
           description
             "This leaf identifies in which node the supporting
@@ -284,9 +258,11 @@ module ietf-network-topology {
         }
         leaf tp-ref {
           type leafref {
-            path "/nd:networks/nd:network[nd:network-id=current()/"+
-              "../network-ref]/nd:node[nd:node-id=current()/../"+
-              "node-ref]/termination-point/tp-id";
+            path
+              "/nd-s:networks/nd-s:network" +
+              "[nd-s:network-id=current()/../network-ref]/" +
+              "nd-s:node[nd-s:node-id=current()/../node-ref]/" +
+              "termination-point/tp-id";
             require-instance false;
           }
           description

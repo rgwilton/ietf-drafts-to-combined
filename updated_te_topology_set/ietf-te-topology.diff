@@ -1,0 +1,175 @@
+264a265
+>       config false;
+323a325
+>       config false;
+327a330
+>       config false;
+357a361
+>       config false;
+361a366
+>       config false;
+733,744c738,739
+<       container config {
+<         description
+<           "Configuration data.";
+<         uses te-link-config;
+<       } // config
+<       container state {
+<         config false;
+<         description
+<           "Operational state data.";
+<         uses te-link-config;
+<         uses te-link-state-derived;
+<       } // state
+---
+>       uses te-link-config;
+>       uses te-link-state-derived;
+780,781c775,776
+<                 path "../../../../../../nw:node[nw:node-id = "
+<                   + "current()/../../../../../nt:source/"
+---
+>                 path "../../../../../nw:node[nw:node-id = "
+>                   + "current()/../../../../nt:source/"
+792,793c787,788
+<                 path "../../../../../../nw:node[nw:node-id = "
+<                   + "current()/../../../../../nt:destination/"
+---
+>                 path "../../../../../nw:node[nw:node-id = "
+>                   + "current()/../../../../nt:destination/"
+841c836
+<         path "../../../../../te/templates/link-template/name";
+---
+>         path "../../../../te/templates/link-template/name";
+1087a1083
+>       config false;
+1092a1089
+>       config false;
+1106a1104
+>       config false;
+1113a1112
+>       config false;
+1128a1128
+>       config false;
+1267,1279c1267,1268
+<       container config {
+<         description
+<           "Configuration data.";
+<         uses te-node-config;
+<       } // config
+<       container state {
+<         config false;
+<         description
+<           "Operational state data.";
+< 
+<         uses te-node-config;
+<         uses te-node-state-derived;
+<       } // state
+---
+>       uses te-node-config;
+>       uses te-node-state-derived;
+1297,1309c1286,1287
+<         container config {
+<           description
+<             "Configuration data.";
+<           uses te-node-tunnel-termination-attributes;
+<         }
+<         container state {
+<           config false;
+<           description
+<             "Operational state data.";
+< 
+<           uses te-node-tunnel-termination-attributes;
+<           uses geolocation-container;
+<         } // state
+---
+>         uses te-node-tunnel-termination-attributes;
+>         uses geolocation-container;
+1406c1384
+<         path "../../../../../te/templates/node-template/name";
+---
+>         path "../../../../te/templates/node-template/name";
+1473,1474c1451
+<               path "../../../../../../../nt:termination-point/"+
+<                 "nt:tp-id";
+---
+>               path "../../../../../../nt:termination-point/nt:tp-id";
+1485,1486c1462
+<               path "../../../../../../../nt:termination-point/"+
+<                 "nt:tp-id";
+---
+>               path "../../../../../../nt:termination-point/nt:tp-id";
+1577a1554
+>       config false;
+1583a1561
+>       config false;
+1595a1574
+>       config false;
+1738c1717
+<             path "../../../../../../nt:termination-point/nt:tp-id";
+---
+>             path "../../../../../nt:termination-point/nt:tp-id";
+1753c1732
+<     uses te-types:explicit-route-hop_config;
+---
+>     uses te-types:explicit-route-hop;
+1773,1779c1752,1754
+<       container config {
+<         description
+<           "Configuration data.";
+<         uses te-termination-point-config;
+<       } // config
+<       container state {
+<         config false;
+---
+>       uses interface-switching-capability-list;
+>       leaf inter-layer-lock-id {
+>         type uint32;
+1781,1784c1756,1765
+<           "Operational state data.";
+<         uses te-termination-point-config;
+<         uses geolocation-container;
+<       } // state
+---
+>           "Inter layer lock ID, used for path computation in a TE
+>            topology covering multiple layers or multiple regions.";
+>         reference
+>           "RFC5212: Requirements for GMPLS-Based Multi-Region and
+>            Multi-Layer Networks (MRN/MLN).
+>            RFC6001: Generalized MPLS (GMPLS) Protocol Extensions for
+>            Multi-Layer and Multi-Region Networks (MLN/MRN).";
+>       }
+> 
+>       uses geolocation-container;
+1787,1802d1767
+<   grouping te-termination-point-config {
+<     description
+<       "TE termination point configuration grouping.";
+<     uses interface-switching-capability-list;
+<     leaf inter-layer-lock-id {
+<       type uint32;
+<       description
+<         "Inter layer lock ID, used for path computation in a TE
+<          topology covering multiple layers or multiple regions.";
+<       reference
+<         "RFC5212: Requirements for GMPLS-Based Multi-Region and
+<          Multi-Layer Networks (MRN/MLN).
+<          RFC6001: Generalized MPLS (GMPLS) Protocol Extensions
+<          for Multi-Layer and Multi-Region Networks (MLN/MRN).";
+<     }
+<   } // te-termination-point-config
+1879,1890c1844,1845
+<       container config {
+<         description
+<           "Configuration data.";
+<         uses te-topology-config;
+<       } // config
+<       container state {
+<         config false;
+<         description
+<           "Operational state data.";
+<         uses te-topology-config;
+<         uses geolocation-container;
+<       } // state
+---
+>       uses te-topology-config;
+>       uses geolocation-container;
